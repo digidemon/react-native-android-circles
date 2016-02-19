@@ -51,6 +51,7 @@ CirclesAndroid.propTypes = {
   animated:  PropTypes.bool,
   text: PropTypes.string,
   textMode: PropTypes.oneOf(['text', 'value', 'percent']),
+  seekMode: PropTypes.bool,
   spinColor: PropTypes.string,
   spinSpeed: PropTypes.number,
   spinBarLength: PropTypes.number,

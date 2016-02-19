@@ -164,6 +164,11 @@ public class CirclesManager extends SimpleViewManager<CirclesView> {
         _animated = val;
     }
 
+    @ReactProp(name = "seekMode", defaultBoolean = false)
+    public void setSeekModeEnabled(CirclesView view, boolean val) {
+        view.setSeekModeEnabled(val);
+    }
+    
     @ReactProp(name = "spinColor")
     public void setSpinColor(CirclesView view, @Nullable String val) {
         view.setSpinBarColor(Color.parseColor(val));
