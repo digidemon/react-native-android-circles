@@ -5,6 +5,34 @@ var React = require('react-native');
 var { NativeModules, requireNativeComponent, PropTypes, View } = React;
 
 class CirclesAndroid extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onChange = this._onChange.bind(this);
+    this._onTouchStart = this._onTouchStart.bind(this);
+    this._onTouchEnd = this._onTouchEnd.bind(this);
+  }
+
+  _onChange(event: Event) {
+    if (!this.props.onValueChange) {
+      return;
+    }
+    this.props.onValueChange(event.nativeEvent.newValue);
+  }
+
+  _onTouchStart(event: Event) {
+    if (!this.props.onTouchStart) {
+      return;
+    }
+    this.props.onTouchStart();
+  }
+
+  _onTouchEnd(event: Event) {
+    if (!this.props.onTouchEnd) {
+      return;
+    }
+    this.props.onTouchEnd();
+  }
+
   spin() {
     NativeModules.UIManager.dispatchViewManagerCommand(
       React.findNodeHandle(this),
@@ -22,7 +50,13 @@ class CirclesAndroid extends React.Component {
   };
 
   render() {
-    return  <NativeCirclesAndroid {...this.props} />;
+    return (
+      <NativeCirclesAndroid 
+        {...this.props}
+        onChange={this._onChange}
+        onTouchStart={this._onTouchStart}
+        onTouchEnd={this._onTouchEnd} />
+      );
   }
 }
 CirclesAndroid.propTypes = {
@@ -55,6 +89,9 @@ CirclesAndroid.propTypes = {
   spinColor: PropTypes.string,
   spinSpeed: PropTypes.number,
   spinBarLength: PropTypes.number,
+  onValueChange: PropTypes.func,
+  onTouchStart: PropTypes.func,
+  onTouchEnd: PropTypes.func
 };
 
 var NativeCirclesAndroid = requireNativeComponent('RCTCircles', CirclesAndroid);

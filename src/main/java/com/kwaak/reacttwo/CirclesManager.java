@@ -18,13 +18,18 @@ public class CirclesManager extends SimpleViewManager<CirclesView> {
 
     public static final int COMMAND_SPIN = 1;
     public static final int COMMAND_STOPSPINNING = 2;
-    private boolean _animated;
 
+    private boolean _animated;
+    private float value;
+    private ThemedReactContext context;
+    private  CirclesView view;
     public CirclesManager() {
     }
 
     public static final String REACT_CLASS = "RCTCircles";
+    private void setValueFromListener(){
 
+    }
     @Override
     public String getName() {
         return REACT_CLASS;
@@ -32,7 +37,11 @@ public class CirclesManager extends SimpleViewManager<CirclesView> {
 
     @Override
     public CirclesView createViewInstance(ThemedReactContext context) {
-        return new CirclesView(context);
+        this.context = context;
+        CirclesView view =  new CirclesView(context);
+        this.view = view;
+        view.setOnProgressChangedListener(this);
+        return view;
     }
 
     @ReactProp(name = "barColors")
@@ -48,6 +57,7 @@ public class CirclesManager extends SimpleViewManager<CirclesView> {
     public void setBarWidth(CirclesView view, int val) {
         view.setBarWidth(val);
     }
+
     @ReactProp(name = "blockCount", defaultInt = 0)
     public void setBlockCount(CirclesView view, int val) {
         view.setBlockCount(val);
@@ -216,5 +226,28 @@ public class CirclesManager extends SimpleViewManager<CirclesView> {
                         getClass().getSimpleName()));
         }
     }
-}
 
+    @Override
+    public void onProgressChanged(float value) {
+        WritableMap changeEvent = Arguments.createMap();
+        changeEvent.putString("newValue", String.valueOf(value));
+        context.getJSModule(RCTEventEmitter.class).receiveEvent(
+                view.getId(),
+                "topChange",
+                changeEvent);
+
+        WritableMap touchEvent = Arguments.createMap();
+        context.getJSModule(RCTEventEmitter.class).receiveEvent(
+                view.getId(),
+                "phasedRegistrationNames",
+                touchEvent);
+
+        WritableMap releaseEvent = Arguments.createMap();
+        context.getJSModule(RCTEventEmitter.class).receiveEvent(
+                view.getId(),
+                "phasedRegistrationNames",
+                releaseEvent);
+
+        this.value = value;
+    }
+}
