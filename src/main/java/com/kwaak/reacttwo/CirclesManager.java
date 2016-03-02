@@ -4,17 +4,21 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 
 import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ReactProp;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.util.Map;
 
+import at.grabner.circleprogress.CircleProgressView;
 import at.grabner.circleprogress.TextMode;
 
-public class CirclesManager extends SimpleViewManager<CirclesView> {
+public class CirclesManager extends SimpleViewManager<CirclesView> implements CircleProgressView.OnProgressChangedListener {
 
     public static final int COMMAND_SPIN = 1;
     public static final int COMMAND_STOPSPINNING = 2;
